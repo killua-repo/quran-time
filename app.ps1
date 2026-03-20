@@ -5,276 +5,270 @@ Add-Type -AssemblyName WindowsBase
 [xml]$xaml = @"
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="WinMiniUtil"
+        Title="Quran Time Utility"
         Height="760"
-        Width="1220"
-        MinHeight="680"
-        MinWidth="1080"
+        Width="1280"
+        MinHeight="700"
+        MinWidth="1100"
         WindowStartupLocation="CenterScreen"
-        Background="#0B1220"
-        Foreground="#E5E7EB"
+        ResizeMode="CanResize"
+        Background="#0E1117"
+        Foreground="#F3F4F6"
         FontFamily="Segoe UI">
+
     <Window.Resources>
-        <Style x:Key="NavButton" TargetType="Button">
-            <Setter Property="Margin" Value="0,0,0,10"/>
-            <Setter Property="Padding" Value="14,12"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="Background" Value="#111827"/>
-            <Setter Property="Foreground" Value="#E5E7EB"/>
-            <Setter Property="BorderBrush" Value="#1F2937"/>
+        <SolidColorBrush x:Key="BgMain" Color="#0E1117"/>
+        <SolidColorBrush x:Key="BgCard" Color="#111827"/>
+        <SolidColorBrush x:Key="BgCard2" Color="#0F172A"/>
+        <SolidColorBrush x:Key="BorderSoft" Color="#263244"/>
+        <SolidColorBrush x:Key="TextMain" Color="#F3F4F6"/>
+        <SolidColorBrush x:Key="TextMuted" Color="#94A3B8"/>
+        <SolidColorBrush x:Key="Accent" Color="#3B82F6"/>
+        <SolidColorBrush x:Key="Accent2" Color="#2563EB"/>
+        <SolidColorBrush x:Key="Success" Color="#10B981"/>
+        <SolidColorBrush x:Key="Danger" Color="#EF4444"/>
+
+        <Style x:Key="TopTabButton" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource TextMain}"/>
+            <Setter Property="Background" Value="#1F2937"/>
+            <Setter Property="BorderBrush" Value="#425066"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="18,10"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="MinWidth" Value="108"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
 
-        <Style x:Key="ActionButton" TargetType="Button">
-            <Setter Property="Margin" Value="0,0,10,10"/>
-            <Setter Property="Padding" Value="12,10"/>
-            <Setter Property="Background" Value="#2563EB"/>
+        <Style x:Key="PrimaryButton" TargetType="Button">
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="#2563EB"/>
+            <Setter Property="Background" Value="{DynamicResource Accent}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource Accent}"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="14,10"/>
+            <Setter Property="Margin" Value="0,0,10,10"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="MinWidth" Value="180"/>
+            <Setter Property="MinWidth" Value="170"/>
             <Setter Property="MinHeight" Value="38"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
 
-        <Style x:Key="CardBorder" TargetType="Border">
-            <Setter Property="Background" Value="#111827"/>
-            <Setter Property="BorderBrush" Value="#1F2937"/>
+        <Style x:Key="SecondaryButton" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource TextMain}"/>
+            <Setter Property="Background" Value="#1F2937"/>
+            <Setter Property="BorderBrush" Value="#425066"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="14,10"/>
+            <Setter Property="Margin" Value="0,0,10,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="MinWidth" Value="170"/>
+            <Setter Property="MinHeight" Value="38"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource BgCard}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderSoft}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="14"/>
-            <Setter Property="Padding" Value="18"/>
-            <Setter Property="Margin" Value="0,0,0,16"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="Margin" Value="0,0,0,14"/>
+        </Style>
+
+        <Style x:Key="SectionTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMain}"/>
+        </Style>
+
+        <Style x:Key="MutedText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
+        </Style>
+
+        <Style x:Key="ToggleCheckBox" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{DynamicResource TextMain}"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="FontSize" Value="14"/>
         </Style>
     </Window.Resources>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+    <Grid Background="{DynamicResource BgMain}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="64"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="220"/>
+        </Grid.RowDefinitions>
 
-        <Border Grid.Column="0" Background="#0F172A" BorderBrush="#1F2937" BorderThickness="0,0,1,0">
-            <DockPanel LastChildFill="True">
-                <StackPanel DockPanel.Dock="Top" Margin="20,24,20,12">
-                    <TextBlock Text="WinMiniUtil" FontSize="24" FontWeight="Bold"/>
-                    <TextBlock Text="PowerShell GUI Tool" FontSize="12" Foreground="#93C5FD" Margin="0,6,0,0"/>
+        <!-- Top Bar -->
+        <Border Grid.Row="0" Background="#0B1220" BorderBrush="{DynamicResource BorderSoft}" BorderThickness="0,0,0,1">
+            <Grid Margin="14,10,14,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Width="34" Height="34" Background="{DynamicResource Accent}" CornerRadius="10" VerticalAlignment="Center">
+                    <TextBlock Text="Q" Foreground="White" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="16,0,0,0" VerticalAlignment="Center">
+                    <Button x:Name="TabInstall" Style="{StaticResource TopTabButton}" Content="Install"/>
+                    <Button x:Name="TabTweaks" Style="{StaticResource TopTabButton}" Content="Tweaks"/>
+                    <Button x:Name="TabConfig" Style="{StaticResource TopTabButton}" Content="Config"/>
+                    <Button x:Name="TabUpdates" Style="{StaticResource TopTabButton}" Content="Updates"/>
+                    <Button x:Name="TabAbout" Style="{StaticResource TopTabButton}" Content="About"/>
                 </StackPanel>
 
-                <StackPanel Margin="14,8,14,14">
-                    <Button x:Name="NavHome" Style="{StaticResource NavButton}" Content="Home"/>
-                    <Button x:Name="NavApps" Style="{StaticResource NavButton}" Content="Apps"/>
-                    <Button x:Name="NavTweaks" Style="{StaticResource NavButton}" Content="Tweaks"/>
-                    <Button x:Name="NavAbout" Style="{StaticResource NavButton}" Content="About"/>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="BtnTheme" Width="42" Height="34" Margin="0,0,8,0"
+                            Background="#1F2937" BorderBrush="#425066" Foreground="White" BorderThickness="1"
+                            Cursor="Hand" Content="☀"/>
+                    <Button x:Name="BtnRename" Width="90" Height="34"
+                            Background="#1F2937" BorderBrush="#425066" Foreground="White" BorderThickness="1"
+                            Cursor="Hand" Content="Rename"/>
                 </StackPanel>
-            </DockPanel>
+            </Grid>
         </Border>
 
-        <Grid Grid.Column="1" Margin="18">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="230"/>
-            </Grid.RowDefinitions>
+        <!-- Quick Actions -->
+        <Border Grid.Row="1" Background="#111827" BorderBrush="{DynamicResource BorderSoft}" BorderThickness="0,0,0,1" Padding="14,12">
+            <WrapPanel>
+                <Button x:Name="BtnStandard" Style="{StaticResource PrimaryButton}" Content="Standard"/>
+                <Button x:Name="BtnMinimal" Style="{StaticResource SecondaryButton}" Content="Minimal"/>
+                <Button x:Name="BtnClear" Style="{StaticResource SecondaryButton}" Content="Clear"/>
+                <Button x:Name="BtnGetInstalled" Style="{StaticResource SecondaryButton}" Content="Get Installed"/>
+            </WrapPanel>
+        </Border>
 
-            <Border Grid.Row="0" Background="#111827" BorderBrush="#1F2937" BorderThickness="1" CornerRadius="14" Padding="18" Margin="0,0,0,16">
+        <!-- Main Content -->
+        <Grid Grid.Row="2" Margin="14">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.1*"/>
+                <ColumnDefinition Width="0.9*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Left Panel -->
+            <Border Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,10,0">
                 <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel>
+                        <TextBlock Text="Essential Tweaks" Style="{StaticResource SectionTitle}" />
+                        <TextBlock Text="Starter list similar to Winutil style." Style="{StaticResource MutedText}" Margin="0,6,0,14"/>
+                    </StackPanel>
+
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <CheckBox x:Name="ChkRestorePoint" Style="{StaticResource ToggleCheckBox}" Content="Create Restore Point"/>
+                            <CheckBox x:Name="ChkTemp" Style="{StaticResource ToggleCheckBox}" Content="Delete Temporary Files"/>
+                            <CheckBox x:Name="ChkTelemetry" Style="{StaticResource ToggleCheckBox}" Content="Disable Telemetry"/>
+                            <CheckBox x:Name="ChkActivity" Style="{StaticResource ToggleCheckBox}" Content="Disable Activity History"/>
+                            <CheckBox x:Name="ChkGameDVR" Style="{StaticResource ToggleCheckBox}" Content="Disable GameDVR"/>
+                            <CheckBox x:Name="ChkHiber" Style="{StaticResource ToggleCheckBox}" Content="Disable Hibernation"/>
+                            <CheckBox x:Name="ChkHomeGroup" Style="{StaticResource ToggleCheckBox}" Content="Disable Homegroup"/>
+                            <CheckBox x:Name="ChkLoc" Style="{StaticResource ToggleCheckBox}" Content="Disable Location Tracking"/>
+                            <CheckBox x:Name="ChkStorage" Style="{StaticResource ToggleCheckBox}" Content="Disable Storage Sense"/>
+                            <CheckBox x:Name="ChkEndTask" Style="{StaticResource ToggleCheckBox}" Content="Enable End Task With Right Click"/>
+                            <CheckBox x:Name="ChkDiskCleanup" Style="{StaticResource ToggleCheckBox}" Content="Run Disk Cleanup"/>
+                            <CheckBox x:Name="ChkTerminal" Style="{StaticResource ToggleCheckBox}" Content="Change Terminal Default"/>
+                            <CheckBox x:Name="ChkRecall" Style="{StaticResource ToggleCheckBox}" Content="Disable Recall"/>
+                            <TextBlock Text="Advanced Tweaks - Caution" Foreground="#60A5FA" FontSize="18" Margin="0,16,0,14"/>
+                            <CheckBox x:Name="ChkIPv6" Style="{StaticResource ToggleCheckBox}" Content="Disable IPv6"/>
+                            <CheckBox x:Name="ChkBgApps" Style="{StaticResource ToggleCheckBox}" Content="Disable Background Apps"/>
+                            <CheckBox x:Name="ChkFullscreen" Style="{StaticResource ToggleCheckBox}" Content="Disable Fullscreen Optimizations"/>
+                            <CheckBox x:Name="ChkCopilot" Style="{StaticResource ToggleCheckBox}" Content="Disable Microsoft Copilot"/>
+                            <CheckBox x:Name="ChkWPBT" Style="{StaticResource ToggleCheckBox}" Content="Disable WPBT"/>
+                            <CheckBox x:Name="ChkPerf" Style="{StaticResource ToggleCheckBox}" Content="Set Display For Performance"/>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <WrapPanel Grid.Row="2" Margin="0,14,0,0">
+                        <Button x:Name="BtnRunTweaks" Style="{StaticResource PrimaryButton}" Content="Run Tweaks"/>
+                        <Button x:Name="BtnUndoTweaks" Style="{StaticResource SecondaryButton}" Content="Undo Selected Tweaks"/>
+                    </WrapPanel>
+                </Grid>
+            </Border>
+
+            <!-- Right Panel -->
+            <StackPanel Grid.Column="1">
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Text="Customize Preferences" Style="{StaticResource SectionTitle}" />
+                        <TextBlock Text="Theme and shell options." Style="{StaticResource MutedText}" Margin="0,6,0,14"/>
+
+                        <CheckBox x:Name="PrefDark" Style="{StaticResource ToggleCheckBox}" Content="Dark Theme for Windows" IsChecked="True"/>
+                        <CheckBox x:Name="PrefBing" Style="{StaticResource ToggleCheckBox}" Content="Bing Search in Start Menu" IsChecked="True"/>
+                        <CheckBox x:Name="PrefNumLock" Style="{StaticResource ToggleCheckBox}" Content="NumLock on Startup" IsChecked="True"/>
+                        <CheckBox x:Name="PrefVerbose" Style="{StaticResource ToggleCheckBox}" Content="Verbose Messages During Logon"/>
+                        <CheckBox x:Name="PrefRecom" Style="{StaticResource ToggleCheckBox}" Content="Recommendations in Start Menu" IsChecked="True"/>
+                        <CheckBox x:Name="PrefSnap" Style="{StaticResource ToggleCheckBox}" Content="Snap Window" IsChecked="True"/>
+                        <CheckBox x:Name="PrefHidden" Style="{StaticResource ToggleCheckBox}" Content="Show Hidden Files" IsChecked="True"/>
+                        <CheckBox x:Name="PrefExt" Style="{StaticResource ToggleCheckBox}" Content="Show File Extensions" IsChecked="True"/>
+                        <CheckBox x:Name="PrefSearch" Style="{StaticResource ToggleCheckBox}" Content="Search Button in Taskbar" IsChecked="True"/>
+                        <CheckBox x:Name="PrefTaskView" Style="{StaticResource ToggleCheckBox}" Content="Task View Button in Taskbar"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Text="Performance Plans" Style="{StaticResource SectionTitle}" />
+                        <TextBlock Text="Safe starter actions for testing." Style="{StaticResource MutedText}" Margin="0,6,0,14"/>
+                        <Button x:Name="BtnUltimateOn" Style="{StaticResource PrimaryButton}" Content="Add and Activate Ultimate Performance"/>
+                        <Button x:Name="BtnUltimateOff" Style="{StaticResource SecondaryButton}" Content="Remove Ultimate Performance"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Text="Window Info" Style="{StaticResource SectionTitle}" />
+                        <TextBlock x:Name="TxtWindowName" Text="Current Window Name: Quran Time Utility" Margin="0,12,0,8" Foreground="#D1D5DB"/>
+                        <TextBlock Text="Click Rename to change the title live." Style="{StaticResource MutedText}"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+
+        <!-- Log Panel -->
+        <Border Grid.Row="3" Margin="14,0,14,14" Background="#0B1220" BorderBrush="{DynamicResource BorderSoft}" BorderThickness="1" CornerRadius="14" Padding="14">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Margin="0,0,0,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel>
-                        <TextBlock x:Name="HeaderTitle" Text="Windows-style admin utility" FontSize="24" FontWeight="Bold"/>
-                        <TextBlock x:Name="HeaderSubTitle" Text="Portable script with modern dark GUI." FontSize="13" Foreground="#94A3B8" Margin="0,8,0,0"/>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                        <Border Background="#1D4ED8" CornerRadius="12" Padding="10,5" Margin="0,0,8,0">
-                            <TextBlock Text="WPF" Foreground="White" FontWeight="SemiBold"/>
-                        </Border>
-                        <Border Background="#059669" CornerRadius="12" Padding="10,5">
-                            <TextBlock Text="PowerShell" Foreground="White" FontWeight="SemiBold"/>
-                        </Border>
-                    </StackPanel>
-                </Grid>
-            </Border>
-
-            <Grid Grid.Row="1">
-                <Grid x:Name="HomePanel">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <StackPanel>
-                            <Border Style="{StaticResource CardBorder}">
-                                <StackPanel>
-                                    <TextBlock Text="Welcome" FontSize="22" FontWeight="Bold"/>
-                                    <TextBlock Text="This starter UI is made for testing, learning, and turning your scripts into a real Windows app style." 
-                                               TextWrapping="Wrap" Margin="0,10,0,12" Foreground="#CBD5E1"/>
-                                    <WrapPanel>
-                                        <Button x:Name="BtnGoApps" Style="{StaticResource ActionButton}" Content="Open Apps Page"/>
-                                        <Button x:Name="BtnGoTweaks" Style="{StaticResource ActionButton}" Content="Open Tweaks Page"/>
-                                        <Button x:Name="BtnOpenGithub" Style="{StaticResource ActionButton}" Content="Open GitHub"/>
-                                    </WrapPanel>
-                                </StackPanel>
-                            </Border>
-
-                            <Grid Margin="0,0,0,8">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <Border Grid.Column="0" Style="{StaticResource CardBorder}" Margin="0,0,8,0">
-                                    <StackPanel>
-                                        <TextBlock Text="What this app does" FontSize="18" FontWeight="Bold"/>
-                                        <TextBlock Text="• Runs Windows commands from buttons" Margin="0,12,0,6" Foreground="#CBD5E1"/>
-                                        <TextBlock Text="• Shows output inside the log panel" Margin="0,0,0,6" Foreground="#CBD5E1"/>
-                                        <TextBlock Text="• Gives you a clean base to add your own tools" Foreground="#CBD5E1"/>
-                                    </StackPanel>
-                                </Border>
-
-                                <Border Grid.Column="1" Style="{StaticResource CardBorder}" Margin="8,0,0,0">
-                                    <StackPanel>
-                                        <TextBlock Text="Next upgrades" FontSize="18" FontWeight="Bold"/>
-                                        <TextBlock Text="• Add icons" Margin="0,12,0,6" Foreground="#CBD5E1"/>
-                                        <TextBlock Text="• Add admin-only actions" Margin="0,0,0,6" Foreground="#CBD5E1"/>
-                                        <TextBlock Text="• Add tabs, settings, and JSON config" Foreground="#CBD5E1"/>
-                                    </StackPanel>
-                                </Border>
-                            </Grid>
-                        </StackPanel>
-                    </ScrollViewer>
+                    <TextBlock Text="Output Log" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource TextMain}"/>
+                    <Button x:Name="BtnClearLog" Grid.Column="1" Width="90" Height="32"
+                            Background="#1F2937" BorderBrush="#425066" Foreground="White" BorderThickness="1"
+                            Cursor="Hand" Content="Clear"/>
                 </Grid>
 
-                <Grid x:Name="AppsPanel" Visibility="Collapsed">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <StackPanel>
-                            <Border Style="{StaticResource CardBorder}">
-                                <StackPanel>
-                                    <TextBlock Text="Apps and tools" FontSize="22" FontWeight="Bold"/>
-                                    <TextBlock Text="Run common commands quickly from buttons." Margin="0,10,0,14" Foreground="#CBD5E1"/>
-                                    <WrapPanel>
-                                        <Button x:Name="BtnWingetList" Style="{StaticResource ActionButton}" Content="Winget List"/>
-                                        <Button x:Name="BtnTaskMgr" Style="{StaticResource ActionButton}" Content="Open Task Manager"/>
-                                        <Button x:Name="BtnWinUpdate" Style="{StaticResource ActionButton}" Content="Open Windows Update"/>
-                                        <Button x:Name="BtnTempFolder" Style="{StaticResource ActionButton}" Content="Open Temp Folder"/>
-                                    </WrapPanel>
-                                </StackPanel>
-                            </Border>
-
-                            <Border Style="{StaticResource CardBorder}">
-                                <StackPanel>
-                                    <TextBlock Text="System info" FontSize="22" FontWeight="Bold"/>
-                                    <TextBlock Text="Useful info for debugging and testing." Margin="0,10,0,14" Foreground="#CBD5E1"/>
-                                    <WrapPanel>
-                                        <Button x:Name="BtnSystemInfo" Style="{StaticResource ActionButton}" Content="Get Computer Info"/>
-                                        <Button x:Name="BtnIPConfig" Style="{StaticResource ActionButton}" Content="IP Config"/>
-                                        <Button x:Name="BtnTopProcesses" Style="{StaticResource ActionButton}" Content="Top Processes"/>
-                                    </WrapPanel>
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
-                    </ScrollViewer>
-                </Grid>
-
-                <Grid x:Name="TweaksPanel" Visibility="Collapsed">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <StackPanel>
-                            <Border Style="{StaticResource CardBorder}">
-                                <StackPanel>
-                                    <TextBlock Text="Safe test tweaks" FontSize="22" FontWeight="Bold"/>
-                                    <TextBlock Text="These are simple starter actions you can test now." Margin="0,10,0,14" Foreground="#CBD5E1"/>
-                                    <WrapPanel>
-                                        <Button x:Name="BtnFlushDNS" Style="{StaticResource ActionButton}" Content="Flush DNS"/>
-                                        <Button x:Name="BtnTempStats" Style="{StaticResource ActionButton}" Content="Temp Stats"/>
-                                        <Button x:Name="BtnServices" Style="{StaticResource ActionButton}" Content="Running Services"/>
-                                    </WrapPanel>
-                                </StackPanel>
-                            </Border>
-
-                            <Border Style="{StaticResource CardBorder}">
-                                <StackPanel>
-                                    <TextBlock Text="Notes" FontSize="18" FontWeight="Bold"/>
-                                    <TextBlock Text="Later you can add admin tweaks like registry edits, debloat scripts, package installs, and restore points." 
-                                               TextWrapping="Wrap" Margin="0,12,0,0" Foreground="#CBD5E1"/>
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
-                    </ScrollViewer>
-                </Grid>
-
-                <Grid x:Name="AboutPanel" Visibility="Collapsed">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <StackPanel>
-                            <Border Style="{StaticResource CardBorder}">
-                                <StackPanel>
-                                    <TextBlock Text="About this starter" FontSize="22" FontWeight="Bold"/>
-                                    <TextBlock Text="This is a one-file GUI project. Test locally first, then push it to GitHub, then use a raw URL launch command." 
-                                               TextWrapping="Wrap" Margin="0,10,0,12" Foreground="#CBD5E1"/>
-                                    <TextBlock Text="Replace USERNAME and REPO below after you upload the file:" Margin="0,0,0,8" Foreground="#CBD5E1"/>
-                                    <TextBox x:Name="TxtLaunch"
-                                             Text='irm "https://raw.githubusercontent.com/USERNAME/REPO/main/app.ps1" | iex'
-                                             Background="#0B1220"
-                                             Foreground="#E5E7EB"
-                                             BorderBrush="#334155"
-                                             BorderThickness="1"
-                                             Padding="12"
-                                             FontFamily="Consolas"
-                                             FontSize="13"
-                                             TextWrapping="Wrap"
-                                             AcceptsReturn="True"
-                                             Height="70"/>
-                                    <WrapPanel Margin="0,12,0,0">
-                                        <Button x:Name="BtnCopyLaunch" Style="{StaticResource ActionButton}" Content="Copy Launch Command"/>
-                                    </WrapPanel>
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
-                    </ScrollViewer>
-                </Grid>
+                <TextBox x:Name="LogBox"
+                         Grid.Row="1"
+                         Background="#020617"
+                         Foreground="#BBF7D0"
+                         BorderBrush="#334155"
+                         BorderThickness="1"
+                         FontFamily="Consolas"
+                         FontSize="13"
+                         Padding="12"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         VerticalScrollBarVisibility="Auto"
+                         IsReadOnly="True"/>
             </Grid>
-
-            <Border Grid.Row="2" Background="#111827" BorderBrush="#1F2937" BorderThickness="1" CornerRadius="14" Padding="14">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <Grid Grid.Row="0" Margin="0,0,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Output Log" FontSize="18" FontWeight="Bold"/>
-                        <Button x:Name="BtnClearLog"
-                                Grid.Column="1"
-                                Content="Clear"
-                                Padding="10,6"
-                                Background="#334155"
-                                Foreground="White"
-                                BorderThickness="0"
-                                Cursor="Hand"/>
-                    </Grid>
-
-                    <TextBox x:Name="LogBox"
-                             Grid.Row="1"
-                             Background="#0B1220"
-                             Foreground="#D1FAE5"
-                             BorderBrush="#334155"
-                             BorderThickness="1"
-                             Padding="12"
-                             FontFamily="Consolas"
-                             FontSize="13"
-                             AcceptsReturn="True"
-                             AcceptsTab="True"
-                             IsReadOnly="True"
-                             VerticalScrollBarVisibility="Auto"
-                             TextWrapping="Wrap"/>
-                </Grid>
-            </Border>
-        </Grid>
+        </Border>
     </Grid>
 </Window>
 "@
@@ -282,200 +276,178 @@ Add-Type -AssemblyName WindowsBase
 $reader = New-Object System.Xml.XmlNodeReader $xaml
 $window = [Windows.Markup.XamlReader]::Load($reader)
 
-$controlNames = @(
-    "NavHome","NavApps","NavTweaks","NavAbout",
-    "HeaderTitle","HeaderSubTitle",
-    "HomePanel","AppsPanel","TweaksPanel","AboutPanel",
-    "BtnGoApps","BtnGoTweaks","BtnOpenGithub",
-    "BtnWingetList","BtnTaskMgr","BtnWinUpdate","BtnTempFolder",
-    "BtnSystemInfo","BtnIPConfig","BtnTopProcesses",
-    "BtnFlushDNS","BtnTempStats","BtnServices",
-    "BtnCopyLaunch","BtnClearLog","LogBox","TxtLaunch"
+$names = @(
+    "TabInstall","TabTweaks","TabConfig","TabUpdates","TabAbout",
+    "BtnTheme","BtnRename","BtnStandard","BtnMinimal","BtnClear","BtnGetInstalled",
+    "BtnRunTweaks","BtnUndoTweaks","BtnUltimateOn","BtnUltimateOff","BtnClearLog",
+    "LogBox","TxtWindowName",
+    "ChkRestorePoint","ChkTemp","ChkTelemetry","ChkActivity","ChkGameDVR","ChkHiber",
+    "ChkHomeGroup","ChkLoc","ChkStorage","ChkEndTask","ChkDiskCleanup","ChkTerminal",
+    "ChkRecall","ChkIPv6","ChkBgApps","ChkFullscreen","ChkCopilot","ChkWPBT","ChkPerf"
 )
 
-foreach ($name in $controlNames) {
-    Set-Variable -Name $name -Value $window.FindName($name) -Scope Script
+foreach ($n in $names) {
+    Set-Variable -Name $n -Value $window.FindName($n) -Scope Script
 }
+
+$script:IsDark = $true
 
 function Write-Log {
     param([string]$Message)
-
-    $time = Get-Date -Format "HH:mm:ss"
-    $script:LogBox.AppendText("[$time] $Message`r`n")
+    $t = Get-Date -Format "HH:mm:ss"
+    $script:LogBox.AppendText("[$t] $Message`r`n")
     $script:LogBox.ScrollToEnd()
 }
 
-function Show-Page {
-    param(
-        [string]$PanelName,
-        [string]$Title,
-        [string]$SubTitle
-    )
-
-    $script:HomePanel.Visibility   = "Collapsed"
-    $script:AppsPanel.Visibility   = "Collapsed"
-    $script:TweaksPanel.Visibility = "Collapsed"
-    $script:AboutPanel.Visibility  = "Collapsed"
-
-    switch ($PanelName) {
-        "Home"   { $script:HomePanel.Visibility   = "Visible" }
-        "Apps"   { $script:AppsPanel.Visibility   = "Visible" }
-        "Tweaks" { $script:TweaksPanel.Visibility = "Visible" }
-        "About"  { $script:AboutPanel.Visibility  = "Visible" }
-    }
-
-    $script:HeaderTitle.Text = $Title
-    $script:HeaderSubTitle.Text = $SubTitle
+function Set-DarkTheme {
+    $window.Background = [System.Windows.Media.Brushes]::Transparent
+    $window.Resources["BgMain"] = [System.Windows.Media.SolidColorBrush]::new([System.Windows.Media.ColorConverter]::ConvertFromString("#0E1117"))
+    $window.Resources["BgCard"] = [System.Windows.Media.SolidColorBrush]::new([System.Windows.Media.ColorConverter]::ConvertFromString("#111827"))
+    $window.Resources["BgCard2"] = [System.Windows.Media.SolidColorBrush]::new([System.Windows.Media.ColorConverter]::ConvertFromString("#0F172A"))
+    $window.Resources["BorderSoft"] = [System.Windows.Media.SolidColorBrush]::new([System.Windows.Media.ColorConverter]::ConvertFromString("#263244"))
+    $window.Resources["TextMain"] = [System.Windows.Media.SolidColorBrush]::new([System.Windows.Media.ColorConverter]::ConvertFromString("#F3F4F6"))
+    $window.Resources["TextMuted"] = [System.Windows.Media.SolidColorBrush]::new([System.Windows.Media.ColorConverter]::ConvertFromString("#94A3B8"))
+    Write-Log "Dark theme enabled."
 }
 
-function Run-External {
-    param(
-        [string]$FileName,
-        [string]$Arguments
-    )
-
-    try {
-        Write-Log "Running: $FileName $Arguments"
-
-        $psi = New-Object System.Diagnostics.ProcessStartInfo
-        $psi.FileName = $FileName
-        $psi.Arguments = $Arguments
-        $psi.RedirectStandardOutput = $true
-        $psi.RedirectStandardError = $true
-        $psi.UseShellExecute = $false
-        $psi.CreateNoWindow = $true
-
-        $process = New-Object System.Diagnostics.Process
-        $process.StartInfo = $psi
-        [void]$process.Start()
-
-        $stdout = $process.StandardOutput.ReadToEnd()
-        $stderr = $process.StandardError.ReadToEnd()
-
-        $process.WaitForExit()
-
-        if ($stdout -and $stdout.Trim()) {
-            Write-Log ($stdout.TrimEnd())
-        }
-
-        if ($stderr -and $stderr.Trim()) {
-            Write-Log ($stderr.TrimEnd())
-        }
-
-        Write-Log "Exit Code: $($process.ExitCode)"
-    }
-    catch {
-        Write-Log $_.Exception.Message
-    }
+function Set-LightTheme {
+    $window.Background = [System.Windows.Media.Brushes]::Transparent
+    $window.Resources["BgMain"] = [System.Windows.Media.SolidColorBrush]::new([System.Windows.Media.ColorConverter]::ConvertFromString("#F3F4F6"))
+    $window.Resources["BgCard"] = [System.Windows.Media.SolidColorBrush]::new([System.Windows.Media.ColorConverter]::ConvertFromString("#FFFFFF"))
+    $window.Resources["BgCard2"] = [System.Windows.Media.SolidColorBrush]::new([System.Windows.Media.ColorConverter]::ConvertFromString("#E5E7EB"))
+    $window.Resources["BorderSoft"] = [System.Windows.Media.SolidColorBrush]::new([System.Windows.Media.ColorConverter]::ConvertFromString("#CBD5E1"))
+    $window.Resources["TextMain"] = [System.Windows.Media.SolidColorBrush]::new([System.Windows.Media.ColorConverter]::ConvertFromString("#111827"))
+    $window.Resources["TextMuted"] = [System.Windows.Media.SolidColorBrush]::new([System.Windows.Media.ColorConverter]::ConvertFromString("#475569"))
+    Write-Log "Light theme enabled."
 }
 
-function Run-PS {
-    param([string]$Command)
+function Get-SelectedTweaks {
+    $items = @()
 
-    try {
-        Write-Log "Running PowerShell command..."
-        $result = Invoke-Expression $Command | Out-String
-        if ($result -and $result.Trim()) {
-            Write-Log ($result.TrimEnd())
-        }
-        else {
-            Write-Log "Command completed."
-        }
-    }
-    catch {
-        Write-Log $_.Exception.Message
-    }
+    if ($script:ChkRestorePoint.IsChecked) { $items += "Create Restore Point" }
+    if ($script:ChkTemp.IsChecked) { $items += "Delete Temporary Files" }
+    if ($script:ChkTelemetry.IsChecked) { $items += "Disable Telemetry" }
+    if ($script:ChkActivity.IsChecked) { $items += "Disable Activity History" }
+    if ($script:ChkGameDVR.IsChecked) { $items += "Disable GameDVR" }
+    if ($script:ChkHiber.IsChecked) { $items += "Disable Hibernation" }
+    if ($script:ChkHomeGroup.IsChecked) { $items += "Disable Homegroup" }
+    if ($script:ChkLoc.IsChecked) { $items += "Disable Location Tracking" }
+    if ($script:ChkStorage.IsChecked) { $items += "Disable Storage Sense" }
+    if ($script:ChkEndTask.IsChecked) { $items += "Enable End Task With Right Click" }
+    if ($script:ChkDiskCleanup.IsChecked) { $items += "Run Disk Cleanup" }
+    if ($script:ChkTerminal.IsChecked) { $items += "Change Terminal Default" }
+    if ($script:ChkRecall.IsChecked) { $items += "Disable Recall" }
+    if ($script:ChkIPv6.IsChecked) { $items += "Disable IPv6" }
+    if ($script:ChkBgApps.IsChecked) { $items += "Disable Background Apps" }
+    if ($script:ChkFullscreen.IsChecked) { $items += "Disable Fullscreen Optimizations" }
+    if ($script:ChkCopilot.IsChecked) { $items += "Disable Copilot" }
+    if ($script:ChkWPBT.IsChecked) { $items += "Disable WPBT" }
+    if ($script:ChkPerf.IsChecked) { $items += "Set Display For Performance" }
+
+    return $items
 }
 
-Show-Page -PanelName "Home" -Title "Windows-style admin utility" -SubTitle "Portable script with modern dark GUI."
-Write-Log "App loaded successfully."
-Write-Log "Use the sidebar to switch between pages."
-
-$script:NavHome.Add_Click({
-    Show-Page -PanelName "Home" -Title "Windows-style admin utility" -SubTitle "Portable script with modern dark GUI."
-})
-
-$script:NavApps.Add_Click({
-    Show-Page -PanelName "Apps" -Title "Apps and tools" -SubTitle "Run common commands quickly."
-})
-
-$script:NavTweaks.Add_Click({
-    Show-Page -PanelName "Tweaks" -Title "Tweaks" -SubTitle "Starter actions you can test safely."
-})
-
-$script:NavAbout.Add_Click({
-    Show-Page -PanelName "About" -Title "About this starter" -SubTitle "One-file project ready for GitHub."
-})
-
-$script:BtnGoApps.Add_Click({
-    Show-Page -PanelName "Apps" -Title "Apps and tools" -SubTitle "Run common commands quickly."
-})
-
-$script:BtnGoTweaks.Add_Click({
-    Show-Page -PanelName "Tweaks" -Title "Tweaks" -SubTitle "Starter actions you can test safely."
-})
-
-$script:BtnOpenGithub.Add_Click({
-    Start-Process "https://github.com"
-    Write-Log "GitHub opened in browser."
-})
-
-$script:BtnWingetList.Add_Click({
-    Run-External -FileName "winget" -Arguments "list"
-})
-
-$script:BtnTaskMgr.Add_Click({
-    Start-Process "taskmgr"
-    Write-Log "Task Manager opened."
-})
-
-$script:BtnWinUpdate.Add_Click({
-    Start-Process "ms-settings:windowsupdate"
-    Write-Log "Windows Update opened."
-})
-
-$script:BtnTempFolder.Add_Click({
-    Start-Process $env:TEMP
-    Write-Log "Temp folder opened: $env:TEMP"
-})
-
-$script:BtnSystemInfo.Add_Click({
-    Run-PS 'Get-ComputerInfo | Select-Object CsName, WindowsProductName, WindowsVersion, OsBuildNumber | Format-List'
-})
-
-$script:BtnIPConfig.Add_Click({
-    Run-External -FileName "ipconfig" -Arguments "/all"
-})
-
-$script:BtnTopProcesses.Add_Click({
-    Run-PS 'Get-Process | Sort-Object CPU -Descending | Select-Object -First 15 Name, Id, CPU, WS | Format-Table -AutoSize'
-})
-
-$script:BtnFlushDNS.Add_Click({
-    Run-External -FileName "ipconfig" -Arguments "/flushdns"
-})
-
-$script:BtnTempStats.Add_Click({
-    try {
-        $items = Get-ChildItem -Path $env:TEMP -Force -ErrorAction SilentlyContinue
-        $count = ($items | Measure-Object).Count
-        $size = ($items | Measure-Object -Property Length -Sum).Sum
-        $sizeMB = [math]::Round(($size / 1MB), 2)
-        Write-Log "Temp items: $count"
-        Write-Log "Approx temp size: $sizeMB MB"
+function Clear-Tweaks {
+    foreach ($name in @(
+        "ChkRestorePoint","ChkTemp","ChkTelemetry","ChkActivity","ChkGameDVR","ChkHiber",
+        "ChkHomeGroup","ChkLoc","ChkStorage","ChkEndTask","ChkDiskCleanup","ChkTerminal",
+        "ChkRecall","ChkIPv6","ChkBgApps","ChkFullscreen","ChkCopilot","ChkWPBT","ChkPerf"
+    )) {
+        (Get-Variable -Name $name -Scope Script).Value.IsChecked = $false
     }
-    catch {
+    Write-Log "All tweak checkboxes cleared."
+}
+
+$window.Title = "Quran Time Utility"
+$script:TxtWindowName.Text = "Current Window Name: $($window.Title)"
+Write-Log "GUI loaded successfully."
+Write-Log "Window title set to: $($window.Title)"
+
+$script:BtnTheme.Add_Click({
+    if ($script:IsDark) {
+        Set-LightTheme
+        $script:BtnTheme.Content = "☾"
+        $script:IsDark = $false
+    } else {
+        Set-DarkTheme
+        $script:BtnTheme.Content = "☀"
+        $script:IsDark = $true
+    }
+})
+
+$script:BtnRename.Add_Click({
+    $newTitle = "Quran Time Utility Pro"
+    $window.Title = $newTitle
+    $script:TxtWindowName.Text = "Current Window Name: $newTitle"
+    Write-Log "Window title changed to: $newTitle"
+})
+
+$script:TabInstall.Add_Click({ Write-Log "Install tab clicked." })
+$script:TabTweaks.Add_Click({ Write-Log "Tweaks tab clicked." })
+$script:TabConfig.Add_Click({ Write-Log "Config tab clicked." })
+$script:TabUpdates.Add_Click({ Write-Log "Updates tab clicked." })
+$script:TabAbout.Add_Click({ Write-Log "About tab clicked." })
+
+$script:BtnStandard.Add_Click({
+    $script:ChkTelemetry.IsChecked = $true
+    $script:ChkActivity.IsChecked = $true
+    $script:ChkTemp.IsChecked = $true
+    $script:ChkStorage.IsChecked = $true
+    $script:ChkRecall.IsChecked = $true
+    Write-Log "Standard preset selected."
+})
+
+$script:BtnMinimal.Add_Click({
+    Clear-Tweaks
+    $script:ChkTemp.IsChecked = $true
+    $script:ChkTelemetry.IsChecked = $true
+    Write-Log "Minimal preset selected."
+})
+
+$script:BtnClear.Add_Click({
+    Clear-Tweaks
+})
+
+$script:BtnGetInstalled.Add_Click({
+    try {
+        $apps = Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* -ErrorAction SilentlyContinue |
+            Select-Object DisplayName |
+            Where-Object { $_.DisplayName } |
+            Select-Object -First 20
+        Write-Log "Installed apps sample:"
+        foreach ($app in $apps) {
+            Write-Log " - $($app.DisplayName)"
+        }
+    } catch {
         Write-Log $_.Exception.Message
     }
 })
 
-$script:BtnServices.Add_Click({
-    Run-PS 'Get-Service | Where-Object {$_.Status -eq "Running"} | Select-Object -First 25 Name, DisplayName, Status | Format-Table -AutoSize'
+$script:BtnRunTweaks.Add_Click({
+    $selected = Get-SelectedTweaks
+    if ($selected.Count -eq 0) {
+        Write-Log "No tweaks selected."
+        return
+    }
+
+    Write-Log "Selected tweaks:"
+    foreach ($item in $selected) {
+        Write-Log " - $item"
+    }
+    Write-Log "Demo mode only: no destructive commands executed yet."
 })
 
-$script:BtnCopyLaunch.Add_Click({
-    [System.Windows.Clipboard]::SetText($script:TxtLaunch.Text)
-    Write-Log "Launch command copied to clipboard."
+$script:BtnUndoTweaks.Add_Click({
+    Write-Log "Undo requested."
+    Write-Log "Later we can map each tweak to a real rollback command."
+})
+
+$script:BtnUltimateOn.Add_Click({
+    Write-Log "Would run: powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61"
+})
+
+$script:BtnUltimateOff.Add_Click({
+    Write-Log "Would remove custom ultimate performance plan if created."
 })
 
 $script:BtnClearLog.Add_Click({
